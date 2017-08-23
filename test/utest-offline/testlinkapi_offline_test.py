@@ -762,6 +762,29 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.assertIn('<testprojectid>,', argsDescription)
         self.assertIn('<requirementdocid>,', argsDescription)
         
+    def test_connect_with_use_datetime(self):
+        """ create a TestLink Generic API dummy with use_datetime"""
+        self.api = DummyAPIClient('http://SERVER-URL-71', 'DEVKEY-71', 
+                                   use_datetime='datetime?')
+        if not IS_PY26:
+            # Py 26 does not define a __call__ method and getattr is overriden
+            # to created a request and return the response
+            # -> so no access to attribute __transport with Py26
+            a_transport = self.api.server.__call__('transport')
+            
+            self.assertEqual('datetime?', a_transport._use_datetime)
+
+    def test_connect_with_context(self):
+        """ create a TestLink Generic API dummy with use_datetime"""
+        self.api = DummyAPIClient('https://SERVER-URL-71', 'DEVKEY-71', 
+                                   context='ssl_context')
+        if not IS_PY26:
+            # Py 26 does not define a __call__ method and getattr is overriden
+            # to created a request and return the response
+            # -> so no access to attribute __transport with Py26
+            a_transport = self.api.server.__call__('transport')
+            
+            self.assertEqual('ssl_context', a_transport.context)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

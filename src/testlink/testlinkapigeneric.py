@@ -41,7 +41,6 @@ decoApiCallAddDevKey, decoApiCallWithoutArgs, \
 decoMakerApiCallReplaceTLResponseError, decoMakerApiCallWithArgs, \
 decoMakerApiCallChangePosToOptArg
 
-
 class TestlinkAPIGeneric(object): 
     """ client for XML-RPC communication between Python and TestLink 
         Implements the TestLink API methods as generic PY methods with 
@@ -63,10 +62,15 @@ class TestlinkAPIGeneric(object):
     def __init__(self, server_url, devKey, **args):
         transport=args.get('transport')
         encoding=args.get('encoding')
-        verbose=args.get('verbose',0)
-        allow_none=args.get('allow_none',0)
+        verbose=args.get('verbose',False)
+        allow_none=args.get('allow_none',False)
+        use_datetime = args.get('use_datetime', False)
+        context = args.get('context', None)
+        # named arg context is used, cause in Py36 it is place in a different 
+        # order as in Py27 and Py35
         self.server = xmlrpclib.Server(server_url, transport, encoding,
-                                       verbose, allow_none)
+                                       verbose, allow_none, use_datetime, 
+                                       context=context)
         self.devKey = devKey
         self._server_url = server_url
         self._positionalArgNames = getMethodsWithPositionalArgs()

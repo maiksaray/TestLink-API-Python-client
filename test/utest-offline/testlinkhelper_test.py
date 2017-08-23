@@ -178,7 +178,23 @@ class TestLinkHelperTestCase(unittest.TestCase):
         self.assertEqual('SERVER-URL-71', a_tl_api.server)
         self.assertEqual('DEVKEY-71', a_tl_api.devKey)
         self.assertEqual('PROXY-71', a_tl_api.args['transport'].proxy)
+
+    def test_connect_with_https_no_context(self):
+        """ create a TestLink API dummy for https with uncertified context """
+        a_helper = self.CLASSUNDERTEST('https://SERVER-URL-71', 'DEVKEY-71')
+        a_tl_api = a_helper.connect(DummyTestLinkAPI)
+        self.assertEqual('https://SERVER-URL-71', a_tl_api.server)
+        self.assertEqual('DEVKEY-71', a_tl_api.devKey)
+        a_context = a_tl_api.args['context']
+        self.assertEqual([], a_context.get_ca_certs())
         
+    def test_connect_with_https_and_context(self):
+        """ create a TestLink API dummy for https with special context """
+        a_helper = self.CLASSUNDERTEST('https://SERVER-URL-71', 'DEVKEY-71')
+        a_tl_api = a_helper.connect(DummyTestLinkAPI, context='ssl_context')
+        self.assertEqual('https://SERVER-URL-71', a_tl_api.server)
+        self.assertEqual('DEVKEY-71', a_tl_api.devKey)
+        self.assertEqual('ssl_context', a_tl_api.args['context'])
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

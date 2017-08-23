@@ -5,6 +5,22 @@ TestLink-API-Python-client v0.6.5 (under develop)
 -------------------------------------------------
 support for TL 1.9.17 future release and py27, py34, py35 and py36
 
+Self signed / Let's Encrypt SSL certificate support #90
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+TestlinkAPIGeneric and TestlinkAPIClient accepts know the additional 
+xmlrpclib.ServerProxy() arguments *use_datetime* and *context* (new with Py2.7.9)
+-  https://docs.python.org/2/library/xmlrpclib.html
+
+*context* allows to define a SSL context, which can holds various data 
+longer-lived than single SSL connections, such as SSL configuration options, 
+certificate(s) and private key(s). (new with Py2.7.9)
+- https://docs.python.org/2/library/ssl.html#ssl-contexts 
+
+TestLinkHelper will set the *unverified_context()* if the server url starts with
+*https* and no *context* is defined, calling 
+- TestLinkHelper().connect(TestlinkAPIClient)
+
 implement 1.9.17 new api interfaces - #76, #81, #82, #83
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

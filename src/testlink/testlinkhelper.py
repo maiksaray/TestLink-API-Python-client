@@ -20,7 +20,7 @@
 import os
 from argparse import ArgumentParser
 from .version import VERSION
-
+import ssl
 
 class TestLinkHelper(object):
     """ Helper Class to find out the TestLink connection parameters.
@@ -138,5 +138,11 @@ class TestLinkHelper(object):
         
         if self._proxy:
             kwargs['transport'] = self._getProxiedTransport()
+            
+        # must we add an uncertified context for a https connection?
+        # only, if kwargs not includes a context
+        if self._server_url.lower().startswith('https'):
+            if not ('context' in kwargs):
+                kwargs['context'] = ssl._create_unverified_context()
             
         return tl_api_class(self._server_url, self._devkey, **kwargs)
